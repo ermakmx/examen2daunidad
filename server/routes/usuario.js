@@ -121,17 +121,51 @@ app.put('/usuario/:id', function(req, res) {
 });
 
 
-app.delete('/usuario/:id/:nombre', function(req, res) {
-    let id = req.params.id;
-    let nombre = req.params.nombre;
+app.delete('/usuario/:id', function(req, res) {
+    // let id = req.params.id;
 
-    res.json({
-        ok: '200',
-        mensaje: 'usuario eliminado',
-        id: id,
-        nombre: nombre
+    // Usuario.deleteOne({ _id: id }, (err, usuarioBorrado) => {
+
+    //     if (err) {
+    //         return res.status(400).json({
+    //             ok: true,
+    //             msg: 'error al eliminar usuario',
+    //             err
+
+    //         });
+
+    //     }
+
+    //     res.json({
+    //         ok: true,
+    //         msg: 'Usuario eliminado con exito',
+    //         usuarioBorrado
+    //     });
+
+    // });
+    let id = req.params.id;
+
+    Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: true,
+                msg: 'error al eliminar usuario',
+                err
+
+            });
+
+        }
+
+        res.json({
+            ok: true,
+            msg: 'Usuario eliminado con exito',
+            usrDB
+        });
+
 
     });
+
 });
 
 module.exports = app;
